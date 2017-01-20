@@ -1,0 +1,24 @@
+{
+  "name": "deferrari",
+  "version": "1.0.0",
+  "description": "Tool for deferring progress until an event has been resolved by string name.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/ralusek/deferrari.git"
+  },
+  "keywords": [
+    "defer",
+    "promise",
+    "bluebird"
+  ],
+  "author": "Tomas Savigliano",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ralusek/deferrari/issues"
+  },
+  "homepage": "https://github.com/ralusek/deferrari#readme"
+}
