@@ -42,6 +42,7 @@ module.exports = class Deferrari {
     p(this).resolutions[event] = new Resolution(false, payload);
     
     if (p(this).deferred[event]) p(this).deferred[event].resolveAll(payload);
+    return Promise.resolve(payload);
   }
   
   /**
@@ -51,6 +52,7 @@ module.exports = class Deferrari {
     p(this).resolutions[event] = new Resolution(true, payload);
 
     if (p(this).deferred[event]) p(this).deferred[event].rejectAll(payload);
+    return Promise.reject(payload);
   }
   
   /**
