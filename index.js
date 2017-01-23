@@ -19,7 +19,7 @@ module.exports = class Deferrari {
   constructor(config) {
     config = config || {};
 
-    if (config.Promise) Promise = config.promise;
+    if (config.Promise) Promise = config.Promise;
 
     p(this).deferred = {};
     p(this).resolutions = {};
