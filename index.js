@@ -16,7 +16,11 @@ module.exports = class Deferrari {
   /**
    *
    */
-  constructor() {
+  constructor(config) {
+    config = config || {};
+
+    if (config.Promise) Promise = config.promise;
+
     p(this).deferred = {};
     p(this).resolutions = {};
   }
