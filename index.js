@@ -38,6 +38,13 @@ module.exports = class Deferrari {
       p(this).deferred[event].add({resolve, reject});
     });
   }
+
+  /**
+   *
+   */
+  isResolved(event) {
+    return !!p(this).resolutions[event];
+  }
   
   /**
    *
