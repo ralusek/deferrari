@@ -42,8 +42,15 @@ module.exports = class Deferrari {
   /**
    *
    */
-  isResolved(event) {
+  isFulfilled(event) {
     return !!p(this).resolutions[event];
+  }
+
+  /**
+   *
+   */
+  isFulfilling(event) {
+    return !this.isFulfilled() && !!p(this).deferred[event];
   }
   
   /**
