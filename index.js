@@ -22,20 +22,27 @@ module.exports = class Deferrari {
     if (config.Promise) Promise = config.Promise;
 
     p(this).deferred = {};
-    p(this).resolutions = {};
+    p(this).promises = {};
+
+    p(this).resolution = {};
   }
   
   /**
    *
    */
   deferUntil(event) {
-    // If resolution is stored, resolve (will reject if was error).
-    if (p(this).resolutions[event]) return p(this).resolutions[event].resolve();
-  
-    if (!p(this).deferred[event]) p(this).deferred[event] = new DeferredQueue();
+    if (p(this).promises[event]) return p(this).promises[event];
 
-    return new Promise((resolve, reject) => {
-      p(this).deferred[event].add({resolve, reject});
+    return (p(this).promises[event] = new Promise((resolve, reject) => {
+      p(this).deferred[event] = {resolve, reject};
+    }))
+    .then((result) => {
+      p(this).resolution[event] = {result};
+      return result;
+    })
+    .catch((err) => {
+      p(this).resolution[event] = {error: err};
+      return Promise.reject(err);
     });
   }
 
@@ -57,86 +64,25 @@ module.exports = class Deferrari {
    *
    */
   resolve(event, payload) {
-    p(this).resolutions[event] = new Resolution(false, payload);
-    
-    if (p(this).deferred[event]) p(this).deferred[event].resolveAll(payload);
-    return Promise.resolve(payload);
+    p(this).deferred[event].resolve(payload);
+    return p(this).promises[event];
   }
   
   /**
    *
    */
   reject(event, payload) {
-    p(this).resolutions[event] = new Resolution(true, payload);
-
-    if (p(this).deferred[event]) p(this).deferred[event].rejectAll(payload);
-    return Promise.reject(payload);
+    p(this).deferred[event].reject(payload);
+    return p(this).promises[event];
   }
   
   /**
    *
    */
   clearResolution(event) {
+    if (!p(this).resolution[event]) throw new Error(`Cannot clear resolution, event (${event}) not resolved.`);
+    delete p(this).deferred[event];
+    delete p(this).promise[event];
     delete p(this).resolution[event];
-  }
-}
-
-
-
-/**
- *
- */
-class DeferredQueue {
-  /**
-   *
-   */
-  constructor() {
-    p(this).deferred = new Set();
-  }
-  
-  /**
-   *
-   */
-  add(deferred) {
-    p(this).deferred.add(deferred);
-  }
-  
-  /**
-   *
-   */
-  resolveAll(payload) {
-    p(this).deferred.forEach(deferred => deferred.resolve(payload));
-    p(this).deferred.clear();
-  }
-  
-  /**
-   *
-   */
-  rejectAll(payload) {
-    p(this).deferred.forEach(deferred => deferred.reject(payload));
-    p(this).deferred.clear();
-  }
-}
-
-
-
-/**
- *
- */
-class Resolution {
-  /**
-   *
-   */
-  constructor(rejected, payload) {
-    p(this).rejected = rejected === true;
-    p(this).payload = payload;
-  }
-  
-  /**
-   *
-   */
-  resolve() {
-    const payload = p(this).payload;
-    return p(this).rejected ? Promise.reject(payload) : Promise.resolve(payload);
   }
 }

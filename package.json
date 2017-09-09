@@ -1,6 +1,6 @@
 {
   "name": "deferrari",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "description": "Tool for deferring progress until an event has been resolved by string name.",
   "main": "index.js",
   "scripts": {

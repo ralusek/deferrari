@@ -19,4 +19,9 @@ setTimeout(() => {
   // Will be resolved immediately because resolution is stored.
   deferrari.deferUntil('nye')
   .then(result => console.log('Am I late? Anyway, happy', result));
+
+  setTimeout(() => {
+    deferrari.deferUntil('nye')
+    .then(result => console.log('I am very late', result));
+  }, 1500);
 }, 1500);
