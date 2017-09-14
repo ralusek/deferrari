@@ -64,6 +64,7 @@ module.exports = class Deferrari {
    *
    */
   resolve(event, payload) {
+    if (!p(this).deferred[event]) this.deferUntil(event);
     p(this).deferred[event].resolve(payload);
     return p(this).promises[event];
   }
